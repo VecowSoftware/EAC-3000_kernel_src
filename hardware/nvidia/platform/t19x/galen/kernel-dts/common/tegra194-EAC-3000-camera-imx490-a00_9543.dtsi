@@ -1,0 +1,268 @@
+/*
+ * Copyright (c) 2018-2019, NVIDIA CORPORATION.  All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+#include <t19x-common-modules/tegra194-EAC-3000-camera-imx490-a00_PCA9543.dtsi>
+#include "dt-bindings/clock/tegra194-clock.h"
+
+#define CAM0_PWDN	TEGRA194_MAIN_GPIO(H, 6)
+#define CAM1_PWDN	TEGRA194_MAIN_GPIO(T, 5)
+#define CAM2_PWDN	TEGRA194_MAIN_GPIO(H, 3)
+#define CAM3_PWDN	TEGRA194_MAIN_GPIO(T, 6)
+#define CAM_I2C_MUX 	TEGRA194_AON_GPIO(CC, 3)
+#define CAMERA_I2C_MUX_BUS(x) (0x1E + x)
+
+/* camera control gpio definitions */
+
+/ {
+	i2c@3180000 {
+		tca9543@72 {
+			compatible = "nxp,pca9543";
+			reg = <0x72>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			skip_mux_detect = "yes";
+			vif-supply = <&p2822_vdd_1v8_cvb>;
+			vcc-supply = <&p2822_vdd_1v8_cvb>;
+			vcc_lp = "vcc";
+			force_bus_start = <CAMERA_I2C_MUX_BUS(0)>;
+			i2c@0 {
+				reg = <0>;
+				i2c-mux,deselect-on-exit;
+				#address-cells = <1>;
+				#size-cells = <0>;
+				dser: max9296@48 {
+					compatible = "nvidia,max9296";
+					streams = "yuv8";
+					reg = <0x48>;
+					csi-mode = "2x4";
+					max-src = <2>;
+					reset-gpios = <&tegra_main_gpio CAM0_PWDN GPIO_ACTIVE_HIGH>;
+                                        fsync-gpio = <6>; //fsync gpio on 9296
+				};
+				ser_prim: max9295_prim@62 {
+					compatible = "nvidia,max9295";
+					streams = "yuv8";
+					reg = <0x62>;
+					is-prim-ser;
+				};
+				ser_a: max9295_a@42 {
+					compatible = "nvidia,max9295";
+					reg = <0x42>;
+					nvidia,gmsl-dser-device = <&dser>;
+				};
+				ser_b: max9295_b@60 {
+					compatible = "nvidia,max9295";
+					reg = <0x60>;
+					nvidia,gmsl-dser-device = <&dser>;
+				};
+				imx490_a@1b {
+					def-addr = <0x6c>;
+					/* Define any required hw resources needed by driver */
+					/* ie. clocks, io pins, power sources */
+					clocks = <&bpmp_clks TEGRA194_CLK_EXTPERIPH1>,
+							<&bpmp_clks TEGRA194_CLK_EXTPERIPH1>;
+					clock-names = "extperiph1", "pllp_grtba";
+					mclk = "extperiph1";
+					nvidia,gmsl-ser-device = <&ser_a>;
+					nvidia,gmsl-dser-device = <&dser>;
+				};
+				imx490_b@1c {
+					def-addr = <0x6c>;
+					/* Define any required hw resources needed by driver */
+					/* ie. clocks, io pins, power sources */
+					clocks = <&bpmp_clks TEGRA194_CLK_EXTPERIPH1>,
+							<&bpmp_clks TEGRA194_CLK_EXTPERIPH1>;
+					clock-names = "extperiph1", "pllp_grtba";
+					mclk = "extperiph1";
+					nvidia,gmsl-ser-device = <&ser_b>;
+					nvidia,gmsl-dser-device = <&dser>;
+				};
+			};
+			i2c@1 {
+				reg = <1>;
+				i2c-mux,deselect-on-exit;
+				#address-cells = <1>;
+				#size-cells = <0>;
+				dsera: max9296@48 {
+					compatible = "nvidia,max9296";
+					streams = "yuv8";
+					reg = <0x48>;
+					csi-mode = "2x4";
+					max-src = <2>;
+					reset-gpios = <&tegra_main_gpio CAM1_PWDN GPIO_ACTIVE_HIGH>;
+                                        fsync-gpio = <6>; //fsync gpio on 9296
+				};
+				ser_prima: max9295_prim@62 {
+					compatible = "nvidia,max9295";
+					streams = "yuv8";
+					reg = <0x62>;
+					is-prim-ser;
+				};
+				ser_c: max9295_a@42 {
+					compatible = "nvidia,max9295";
+					reg = <0x42>;
+					nvidia,gmsl-dser-device = <&dsera>;
+				};
+				ser_d: max9295_b@60 {
+					compatible = "nvidia,max9295";
+					reg = <0x60>;
+					nvidia,gmsl-dser-device = <&dsera>;
+				};
+				imx490_c@1b {
+					def-addr = <0x6c>;
+					/* Define any required hw resources needed by driver */
+					/* ie. clocks, io pins, power sources */
+					clocks = <&bpmp_clks TEGRA194_CLK_EXTPERIPH1>,
+							<&bpmp_clks TEGRA194_CLK_EXTPERIPH1>;
+					clock-names = "extperiph1", "pllp_grtba";
+					mclk = "extperiph1";
+					nvidia,gmsl-ser-device = <&ser_c>;
+					nvidia,gmsl-dser-device = <&dsera>;
+				};
+				imx490_d@1c {
+					def-addr = <0x6c>;
+					/* Define any required hw resources needed by driver */
+					/* ie. clocks, io pins, power sources */
+					clocks = <&bpmp_clks TEGRA194_CLK_EXTPERIPH1>,
+							<&bpmp_clks TEGRA194_CLK_EXTPERIPH1>;
+					clock-names = "extperiph1", "pllp_grtba";
+					mclk = "extperiph1";
+					nvidia,gmsl-ser-device = <&ser_d>;
+					nvidia,gmsl-dser-device = <&dsera>;
+				};
+			};
+
+		};
+		tca9543@73 {
+			compatible = "nxp,pca9543";
+			reg = <0x73>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			skip_mux_detect = "yes";
+			vif-supply = <&p2822_vdd_1v8_cvb>;
+			vcc-supply = <&p2822_vdd_1v8_cvb>;
+			vcc_lp = "vcc";
+			force_bus_start = <CAMERA_I2C_MUX_BUS(2)>;
+			i2c@0 {
+				reg = <0>;
+				i2c-mux,deselect-on-exit;
+				address-cells = <1>;
+				#size-cells = <0>;
+				dserb: max9296@48 {
+					compatible = "nvidia,max9296";
+					streams = "yuv8";
+					reg = <0x48>;
+					csi-mode = "2x4";
+					max-src = <2>;
+					reset-gpios = <&tegra_main_gpio CAM2_PWDN GPIO_ACTIVE_HIGH>;
+                                        fsync-gpio = <6>; //fsync gpio on 9296
+				};
+				ser_primb: max9295_prim@62 {
+					compatible = "nvidia,max9295";
+					streams = "yuv8";
+					reg = <0x62>;
+					is-prim-ser;
+				};
+				ser_e: max9295_a@42 {
+					compatible = "nvidia,max9295";
+					reg = <0x42>;
+					nvidia,gmsl-dser-device = <&dserb>;
+				};
+				ser_f: max9295_b@60 {
+					compatible = "nvidia,max9295";
+					reg = <0x60>;
+					nvidia,gmsl-dser-device = <&dserb>;
+				};
+				imx490_e@1b {
+					def-addr = <0x6c>;
+					/* Define any required hw resources needed by driver */
+					/* ie. clocks, io pins, power sources */
+					clocks = <&bpmp_clks TEGRA194_CLK_EXTPERIPH1>,
+							<&bpmp_clks TEGRA194_CLK_EXTPERIPH1>;
+					clock-names = "extperiph1", "pllp_grtba";
+					mclk = "extperiph1";
+					nvidia,gmsl-ser-device = <&ser_e>;
+					nvidia,gmsl-dser-device = <&dserb>;
+				};
+				imx490_f@1c {
+					def-addr = <0x6c>;
+					/* Define any required hw resources needed by driver */
+					/* ie. clocks, io pins, power sources */
+					clocks = <&bpmp_clks TEGRA194_CLK_EXTPERIPH1>,
+							<&bpmp_clks TEGRA194_CLK_EXTPERIPH1>;
+					clock-names = "extperiph1", "pllp_grtba";
+					mclk = "extperiph1";
+					nvidia,gmsl-ser-device = <&ser_f>;
+					nvidia,gmsl-dser-device = <&dserb>;
+				};
+			};
+			i2c@1 {
+				reg = <1>;
+				i2c-mux,deselect-on-exit;
+				#address-cells = <1>;
+				#size-cells = <0>;
+				dserc: max9296@48 {
+					compatible = "nvidia,max9296";
+					streams = "yuv8";
+					reg = <0x48>;
+					csi-mode = "2x4";
+					max-src = <2>;
+					reset-gpios = <&tegra_main_gpio CAM3_PWDN GPIO_ACTIVE_HIGH>;
+                                        fsync-gpio = <6>; //fsync gpio on 9296
+				};
+				ser_primc: max9295_prim@62 {
+					compatible = "nvidia,max9295";
+					streams = "yuv8";
+					reg = <0x62>;
+					is-prim-ser;
+				};
+				ser_g: max9295_a@42 {
+					compatible = "nvidia,max9295";
+					reg = <0x42>;
+					nvidia,gmsl-dser-device = <&dserc>;
+				};
+				ser_h: max9295_b@60 {
+					compatible = "nvidia,max9295";
+					reg = <0x60>;
+					nvidia,gmsl-dser-device = <&dserc>;
+				};
+				imx490_g@1b {
+					def-addr = <0x6c>;
+					/* Define any required hw resources needed by driver */
+					/* ie. clocks, io pins, power sources */
+					clocks = <&bpmp_clks TEGRA194_CLK_EXTPERIPH1>,
+							<&bpmp_clks TEGRA194_CLK_EXTPERIPH1>;
+					clock-names = "extperiph1", "pllp_grtba";
+					mclk = "extperiph1";
+					nvidia,gmsl-ser-device = <&ser_g>;
+					nvidia,gmsl-dser-device = <&dserc>;
+				};
+				imx490_h@1c {
+					def-addr = <0x6c>;
+					/* Define any required hw resources needed by driver */
+					/* ie. clocks, io pins, power sources */
+					clocks = <&bpmp_clks TEGRA194_CLK_EXTPERIPH1>,
+							<&bpmp_clks TEGRA194_CLK_EXTPERIPH1>;
+					clock-names = "extperiph1", "pllp_grtba";
+					mclk = "extperiph1";
+					nvidia,gmsl-ser-device = <&ser_h>;
+					nvidia,gmsl-dser-device = <&dserc>;
+				};
+			};
+
+		};
+	};
+};

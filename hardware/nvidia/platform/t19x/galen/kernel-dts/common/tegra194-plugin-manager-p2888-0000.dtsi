@@ -51,7 +51,8 @@
 			override@0 {
 				target = <&tegra_ufs>;
 				_overlay_ {
-					status = "okay";
+					//status = "okay";
+					status = "disabled";
 				};
 			};
 		};

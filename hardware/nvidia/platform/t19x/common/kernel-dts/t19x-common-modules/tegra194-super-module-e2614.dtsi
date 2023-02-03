@@ -137,8 +137,8 @@
 					status = "disabled";
 
 					/* gpio for jack detection */
-					gpios = <&tegra_main_gpio TEGRA194_MAIN_GPIO(R, 0) 0>;
-
+					//gpios = <&tegra_main_gpio TEGRA194_MAIN_GPIO(R, 0) 0>;
+					
 					/* refer include/sound/rt5659.h for the values to be used */
 					realtek,jd-src = <1>; /* RT5659_JD3 */
 					realtek,dmic1-data-pin = <2>; /* RT5659_DMIC1_DATA_GPIO5 */

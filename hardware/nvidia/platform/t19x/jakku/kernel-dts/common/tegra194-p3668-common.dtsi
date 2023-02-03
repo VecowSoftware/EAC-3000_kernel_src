@@ -273,7 +273,11 @@
 		vmmc-supply = <&p3668_vdd_sdmmc1_sw>;
 		status = "okay";
 	};
-
+	
+	sdhci@3440000 {
+		status = "okay";
+	};
+	
 	mipical@3990000 {
 		status = "okay";
 	};
@@ -303,6 +307,7 @@
 			label = "pex_refclk_sel_high";
 			status = "disabled";
 		};
+		/*
 		w-disable1 {
 			gpio-hog;
 			output-high;
@@ -326,6 +331,7 @@
 			label = "suspend-led-gpio";
 			status = "okay";
 		};
+		*/
 	};
 
 	pcie@14160000 {
@@ -349,7 +355,8 @@
 		vddio-pex-ctl-supply = <&p3668_spmic_sd3>;
 		nvidia,disable-aspm-states = <0xf>;
 		nvidia,enable-power-down;
-		nvidia,max-speed = <4>;
+		//nvidia,max-speed = <4>;
+		nvidia,max-speed = <2>; //Leo 2021/08/24
 
 		phys = <&p2u_12>,
 		       <&p2u_13>,
@@ -478,10 +485,10 @@
 
 	leds {
 		compatible = "gpio-leds";
-		status = "okay";
+		status = "disabled";
 		pwr {
-			gpios = <&tegra_aon_gpio TEGRA194_AON_GPIO(CC, 1) GPIO_ACTIVE_HIGH>;
-			default-state = "on";
+			//gpios = <&tegra_aon_gpio TEGRA194_AON_GPIO(CC, 1) GPIO_ACTIVE_HIGH>;
+			//default-state = "on";
 		};
 	};
 

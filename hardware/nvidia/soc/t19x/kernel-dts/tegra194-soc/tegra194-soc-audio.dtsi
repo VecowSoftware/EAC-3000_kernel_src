@@ -366,7 +366,8 @@
 					<&bpmp_clks TEGRA194_CLK_PLLA_OUT0>;
 				assigned-clock-rates = <1536000>;
 				fsync-width = <31>;
-				status = "disabled";
+				//status = "disabled";
+				status = "okay";
 			};
 
 			tegra_i2s6: i2s@2901500 {

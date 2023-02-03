@@ -586,6 +586,12 @@ static int imx390_board_setup(struct imx390 *priv)
 		goto error;
 	}
 
+
+	err = of_property_read_u32(node, "reg_mux", &priv->g_ctx.reg_mux);
+	if (err < 0) {
+		dev_err(dev, "reg_mux not found\n");
+		goto error;
+ 	}
 	err = of_property_read_u32(node, "def-addr",
 					&priv->g_ctx.sdev_def);
 	if (err < 0) {
@@ -734,7 +740,12 @@ static int imx390_board_setup(struct imx390 *priv)
 		if (!strcmp(str_value1[i], "raw12")) {
 			priv->g_ctx.streams[i].st_data_type =
 							GMSL_CSI_DT_RAW_12;
-		} else if (!strcmp(str_value1[i], "embed")) {
+		} 
+		/*else if (!strcmp(str_value1[i], "yuv8")) {
+			priv->g_ctx.streams[i].st_data_type = 
+			                               GMSL_CSI_DT_YUV_8;
+		}*/ 
+		else if (!strcmp(str_value1[i], "embed")) {
 			priv->g_ctx.streams[i].st_data_type =
 							GMSL_CSI_DT_EMBED;
 		} else if (!strcmp(str_value1[i], "ued-u1")) {

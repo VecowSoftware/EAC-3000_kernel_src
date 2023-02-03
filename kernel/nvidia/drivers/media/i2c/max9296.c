@@ -183,6 +183,12 @@ static void max9296_pipes_reset(struct max9296 *priv)
 			MAX9296_CSI_CTRL_1, 0, MAX9296_INVAL_ST_ID},
 		{MAX9296_PIPE_Y, GMSL_CSI_DT_RAW_12,
 			MAX9296_CSI_CTRL_1, 0, MAX9296_INVAL_ST_ID},
+		/*
+		{MAX9296_PIPE_X, GMSL_CSI_DT_YUV_8,					// For YUV8 Leo 221013
+			MAX9296_CSI_CTRL_1, 0, MAX9296_INVAL_ST_ID},
+		{MAX9296_PIPE_Y, GMSL_CSI_DT_YUV_8,					// For YUV8
+			MAX9296_CSI_CTRL_1, 0, MAX9296_INVAL_ST_ID},
+		*/
 		{MAX9296_PIPE_Z, GMSL_CSI_DT_EMBED,
 			MAX9296_CSI_CTRL_1, 0, MAX9296_INVAL_ST_ID},
 		{MAX9296_PIPE_U, GMSL_CSI_DT_EMBED,
@@ -572,8 +578,23 @@ static int max9296_setup_pipeline(struct device *dev,
 
 	for (i = 0; i < g_ctx->num_streams; i++) {
 		/* Base data type mapping: pipeX/RAW12/CSICNTR1 */
+		/*
+		struct reg_pair map_pipe_yuv8[] = {					// for YUV8 Leo 221013
+			
+			{MAX9296_TX11_PIPE_X_EN_ADDR, 0x7},
+			{MAX9296_TX45_PIPE_X_DST_CTRL_ADDR, 0x15},
+
+			{MAX9296_PIPE_X_SRC_0_MAP_ADDR, 0x1E},			// for YUV8
+			{MAX9296_PIPE_X_DST_0_MAP_ADDR, 0x1E},			// for YUV8
+			{MAX9296_PIPE_X_SRC_1_MAP_ADDR, 0x00},
+			{MAX9296_PIPE_X_DST_1_MAP_ADDR, 0x00},
+			{MAX9296_PIPE_X_SRC_2_MAP_ADDR, 0x01},
+			{MAX9296_PIPE_X_DST_2_MAP_ADDR, 0x01},
+		};
+		*/
+		
 		struct reg_pair map_pipe_raw12[] = {
-			/* addr, val */
+			
 			{MAX9296_TX11_PIPE_X_EN_ADDR, 0x7},
 			{MAX9296_TX45_PIPE_X_DST_CTRL_ADDR, 0x15},
 			{MAX9296_PIPE_X_SRC_0_MAP_ADDR, 0x2C},
@@ -600,10 +621,17 @@ static int max9296_setup_pipeline(struct device *dev,
 		g_stream = &g_ctx->streams[i];
 		g_stream->des_pipe = MAX9296_PIPE_INVALID;
 
-		if (g_stream->st_data_type == GMSL_CSI_DT_RAW_12) {
+/*
+		if (g_stream->st_data_type == GMSL_CSI_DT_YUV_8) {			// for YUV8
+			map_list = map_pipe_yuv8;								// for YUV8 Leo 221013
+			arr_sz = ARRAY_SIZE(map_pipe_yuv8);						// for YUV8
+		} 
+		*/
+		 if (g_stream->st_data_type == GMSL_CSI_DT_RAW_12) {
 			map_list = map_pipe_raw12;
 			arr_sz = ARRAY_SIZE(map_pipe_raw12);
-		} else if (g_stream->st_data_type == GMSL_CSI_DT_EMBED) {
+		}
+		else if (g_stream->st_data_type == GMSL_CSI_DT_EMBED) {
 			map_list = map_pipe_embed;
 			arr_sz = ARRAY_SIZE(map_pipe_embed);
 		} else if (g_stream->st_data_type == GMSL_CSI_DT_UED_U1) {

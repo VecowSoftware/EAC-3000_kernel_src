@@ -77,7 +77,25 @@
 	};
 
 	spi@c260000 {
-		status = "disabled";
+		status = "okay";
+		spi@0 {
+			compatible = "tegra-spidev";
+			reg = <0x0>;
+			spi-max-frequency = <33000000>;
+			controller-data {
+				nvidia,enable-hw-based-cs;
+				nvidia,rx-clk-tap-delay = <0x11>;
+			};
+		};
+		spi@1 {
+			compatible = "tegra-spidev";
+			reg = <0x1>;
+			spi-max-frequency = <33000000>;
+			controller-data {
+				nvidia,enable-hw-based-cs;
+				nvidia,rx-clk-tap-delay = <0x11>;
+			};
+		};
 	};
 
 	spi@3210000 {
@@ -102,12 +120,70 @@
 		};
 	};
 
+	spi@3230000 {
+		status = "okay";
+		spi@0 {
+			compatible = "tegra-spidev";
+			reg = <0x0>;
+			spi-max-frequency = <33000000>;
+			controller-data {
+				nvidia,enable-hw-based-cs;
+				nvidia,rx-clk-tap-delay = <0x11>;
+			};
+		};
+		spi@1 {
+			compatible = "tegra-spidev";
+			reg = <0x1>;
+			spi-max-frequency = <33000000>;
+			controller-data {
+				nvidia,enable-hw-based-cs;
+				nvidia,rx-clk-tap-delay = <0x11>;
+			};
+		};
+	};
+
 	spi@3270000 {
-		status = "disabled";
+		status = "okay";
+		spi@0 {
+			compatible = "tegra-spidev";
+			reg = <0x0>;
+			spi-max-frequency = <33000000>;
+			controller-data {
+				nvidia,enable-hw-based-cs;
+				nvidia,rx-clk-tap-delay = <0x11>;
+			};
+		};
+		spi@1 {
+			compatible = "tegra-spidev";
+			reg = <0x1>;
+			spi-max-frequency = <33000000>;
+			controller-data {
+				nvidia,enable-hw-based-cs;
+				nvidia,rx-clk-tap-delay = <0x11>;
+			};
+		};
 	};
 
 	spi@3300000 {
-		status = "disabled";
+		status = "okay";
+		spi@0 {
+			compatible = "tegra-spidev";
+			reg = <0x0>;
+			spi-max-frequency = <33000000>;
+			controller-data {
+				nvidia,enable-hw-based-cs;
+				nvidia,rx-clk-tap-delay = <0x11>;
+			};
+		};
+		spi@1 {
+			compatible = "tegra-spidev";
+			reg = <0x1>;
+			spi-max-frequency = <33000000>;
+			controller-data {
+				nvidia,enable-hw-based-cs;
+				nvidia,rx-clk-tap-delay = <0x11>;
+			};
+		};
 	};
 
 	pmc@c370000 {
@@ -126,8 +202,10 @@
 			gyroscope_delay_us_min = <1250>;
 			status = "disabled";
 		};
-		ucsi_ccg: ucsi_ccg@8 {
-			status = "okay";
+		ucsi_ccg: ucsi_ccg@8 {			
+			//status = "okay";
+			status = "disabled";
+			/*
 			typec-extcon {
 				typec_port0: port-0 {
 					status = "okay";
@@ -144,6 +222,7 @@
 					#extcon-cells = <1>;
 				};
 			};
+			*/
 		};
 	};
 
@@ -193,7 +272,7 @@
 
 		ports {
 			usb2-0 {
-				mode = "otg";
+				mode = "host";
 				status = "okay";
 			};
 			usb2-1 {
@@ -226,9 +305,9 @@
 #endif
 
 	tegra_xudc: xudc@3550000 {
-		extcon-cables = <&typec_port0 0>;
-		extcon-cable-names = "vbus";
-		#extcon-cells = <1>;
+		//extcon-cables = <&typec_port0 0>;
+		//extcon-cable-names = "vbus";
+		//#extcon-cells = <1>;
 #if TEGRA_XUSB_PADCONTROL_VERSION >= DT_VERSION_2
 		phys = <&{/xusb_padctl@3520000/pads/usb2/lanes/usb2-0}>,
 			<&{/xusb_padctl@3520000/pads/usb3/lanes/usb3-2}>;
@@ -236,13 +315,13 @@
 		nvidia,xusb-padctl = <&xusb_padctl>;
 #endif
 		nvidia,boost_cpu_freq = <1200>;
-		status = "okay";
+		status = "disabled";
 	};
 
 	tegra_xhci: xhci@3610000 {
-		extcon-cables = <&typec_port0 1>;
-		extcon-cable-names = "id";
-		#extcon-cells = <1>;
+		//extcon-cables = <&typec_port0 1>;
+		//extcon-cable-names = "id";
+		//#extcon-cells = <1>;
 #if TEGRA_XUSB_PADCONTROL_VERSION >= DT_VERSION_2
 		phys = <&{/xusb_padctl@3520000/pads/usb2/lanes/usb2-0}>,
 			<&{/xusb_padctl@3520000/pads/usb2/lanes/usb2-1}>,
@@ -293,13 +372,27 @@
 		};
 	};
 
-	mttcan@c310000 {
-		status = "okay";
-	};
+        mttcan@c310000 {
+        	status = "okay";
+		pll_source = "pllaon";
+		 clocks = <&bpmp_clks TEGRA194_CLK_CAN1_CORE>,
+			<&bpmp_clks TEGRA194_CLK_CAN1_HOST>,
+			<&bpmp_clks TEGRA194_CLK_CAN1>,
+			<&bpmp_clks TEGRA194_CLK_PLLAON>;
+		 clock-names = "can_core", "can_host","can", "pllaon";
+        };
 
-	mttcan@c320000 {
-		status = "okay";
-	};
+        mttcan@c320000 {
+                status = "okay";
+		pll_source = "pllaon";
+		 clocks = <&bpmp_clks TEGRA194_CLK_CAN2_CORE>,
+			<&bpmp_clks TEGRA194_CLK_CAN2_HOST>,
+			<&bpmp_clks TEGRA194_CLK_CAN2>,
+			<&bpmp_clks TEGRA194_CLK_PLLAON>;
+		 clock-names = "can_core", "can_host","can", "pllaon";
+        };
+
+	
 
 	serial@3110000 {
 		status = "okay";
@@ -346,7 +439,7 @@
 	ufshci@2450000 {
 		status = "disabled";
 		nvidia,enable-hs-mode;
-		nvidia,cd-gpios = <&tegra_aon_gpio TEGRA194_AON_GPIO(EE, 0) GPIO_ACTIVE_HIGH>;
+		//nvidia,cd-gpios = <&tegra_aon_gpio TEGRA194_AON_GPIO(EE, 0) GPIO_ACTIVE_HIGH>;
 		nvidia,cd-wakeup-capable;
 	};
 	pfsd {
@@ -357,31 +450,31 @@
 		compatible = "nvidia,clocks-config";
 		status = "okay";
 		disable {
-			clocks = <&aon_clks TEGRA194_CLK_PLLAON>,
-				<&bpmp_clks TEGRA194_CLK_CAN1>,
-				<&bpmp_clks TEGRA194_CLK_CAN2>;
+			//clocks = <&aon_clks TEGRA194_CLK_PLLAON>,
+			//	<&bpmp_clks TEGRA194_CLK_CAN1>,
+			//	<&bpmp_clks TEGRA194_CLK_CAN2>;
 		};
 	};
 };
 
 &head0 {
-	extcon-cables = <&typec_port0 2 &typec_port1 2>;
-	extcon-cable-names = "typec0", "typec1";
-	#extcon-cells = <1>;
+	//extcon-cables = <&typec_port0 2 &typec_port1 2>;
+	//extcon-cable-names = "typec0", "typec1";
+	//#extcon-cells = <1>;
 };
 
 &head1 {
-	extcon-cables = <&typec_port0 2 &typec_port1 2>;
-	extcon-cable-names = "typec0", "typec1";
-	#extcon-cells = <1>;
+	//extcon-cables = <&typec_port0 2 &typec_port1 2>;
+	//extcon-cable-names = "typec0", "typec1";
+	//#extcon-cells = <1>;
 };
 
 &head2 {
-	extcon-cables = <&typec_port0 2 &typec_port1 2>;
-	extcon-cable-names = "typec0", "typec1";
-	#extcon-cells = <1>;
+	//extcon-cables = <&typec_port0 2 &typec_port1 2>;
+	//extcon-cable-names = "typec0", "typec1";
+	//#extcon-cells = <1>;
 };
-
+/*
 &sor0 {
 	nvidia,typec-port = /bits/ 8 <0>;
 };
@@ -389,7 +482,7 @@
 &sor1 {
 	nvidia,typec-port = /bits/ 8 <1>;
 };
-
+*/
 #if LINUX_VERSION >= 414
 #include <tegra194-linux-4.14.dtsi>
 #endif

@@ -79,7 +79,8 @@
 		sd-uhs-sdr12;
 		mmc-ddr-1_8v;
 		mmc-hs200-1_8v;
-		cd-inverted;
+		//cd-inverted;
+		cd-gpios = <&tegra_main_gpio TEGRA194_MAIN_GPIO(R, 0) 0>;
 		nvidia,min-tap-delay = <96>;
 		nvidia,max-tap-delay = <139>;
 		nvidia,vqmmc-always-on;

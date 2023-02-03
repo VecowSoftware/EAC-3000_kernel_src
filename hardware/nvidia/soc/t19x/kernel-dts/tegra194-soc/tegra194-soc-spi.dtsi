@@ -43,7 +43,8 @@
 		clock-names = "spi", "pll_p", "clk_m";
 		resets = <&bpmp_resets TEGRA194_RESET_SPI1>;
 		reset-names = "spi";
-		status = "disabled";
+		//status = "disabled";
+		status = "okay";
 	};
 
 	spi1: spi@c260000 {
@@ -64,7 +65,8 @@
 		clock-names = "spi", "pll_p", "osc";
 		resets = <&bpmp_resets TEGRA194_RESET_SPI2>;
 		reset-names = "spi";
-		status = "disabled";
+		//status = "disabled";
+		status = "okay";
 	};
 
 	spi2: spi@3230000 {
@@ -85,7 +87,8 @@
 		clock-names = "spi", "pll_p", "clk_m";
 		resets = <&bpmp_resets TEGRA194_RESET_SPI3>;
 		reset-names = "spi";
-		status = "disabled";
+		//status = "disabled";
+		status = "okay";
 	};
 
 	qspi0: spi@3270000 {
