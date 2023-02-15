@@ -722,4 +722,9 @@
 		compatible = "nvidia,denver-hardwood";
 		interrupts = <0 24 0x4>;
 	};
+	
+	ether_qos@2490000
+	{
+		status = "disabled";
+        };
 };
