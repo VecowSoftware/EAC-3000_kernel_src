@@ -297,14 +297,17 @@
 		ports {
 			usb2-0 {
 				mode = "peripheral";
+				//mode = "otg";
 				usb-role-switch;
 				status = "okay";
+				
 				connector {
  					compatible = "usb-b-connector", "gpio-usb-b-connector";
  					label = "micro-USB";
  					type = "micro";
  					cable-connected-on-boot = <0>;
  				};
+ 				
  				
 /*
 #if TEGRA_XUSB_DT_VERSION >= DT_VERSION_3
@@ -333,11 +336,11 @@
 				status = "okay";
 			};
 			usb3-2 {
-				nvidia,usb2-companion = <0>;
+				nvidia,usb2-companion = <2>;
 				status = "okay";
 			};
 			usb3-3 {
-				nvidia,usb2-companion = <3>;
+				nvidia,usb2-companion = <0>;
 				nvidia,usb3-gen1-only= <1>;
 				status = "okay";
 			};
@@ -353,7 +356,7 @@
 #endif
 */
 		phys = <&{/xusb_padctl@3520000/pads/usb2/lanes/usb2-0}>,
-			<&{/xusb_padctl@3520000/pads/usb3/lanes/usb3-2}>;
+			<&{/xusb_padctl@3520000/pads/usb3/lanes/usb3-3}>;
 #if defined(LINUX_VERSION) && LINUX_VERSION > 414
 		phy-names = "usb2-0", "usb3-2";
 #else
@@ -362,6 +365,7 @@
 		nvidia,xusb-padctl = <&xusb_padctl>;
 		nvidia,boost_cpu_freq = <1200>;
 		status = "okay";
+		//status = "disabled";
 	};
 
 	tegra_xhci: xhci@3610000 {
