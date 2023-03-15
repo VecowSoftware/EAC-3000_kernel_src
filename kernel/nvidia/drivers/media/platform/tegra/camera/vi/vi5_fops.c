@@ -211,6 +211,13 @@ static int vi5_add_ctrls(struct tegra_channel *chan)
 
 	/* Add vi5 custom controls */
 	for (i = 0; i < ARRAY_SIZE(vi5_custom_ctrls); i++) {
+#ifdef CONFIG_VIDEO_ECAM
+		/* Skipped below 3 controls for econ YUV camera modules */
+		if (vi5_custom_ctrls[i].id == TEGRA_CAMERA_CID_SENSOR_CONFIG ||
+			vi5_custom_ctrls[i].id == TEGRA_CAMERA_CID_SENSOR_MODE_BLOB ||
+			vi5_custom_ctrls[i].id == TEGRA_CAMERA_CID_SENSOR_CONTROL_BLOB )
+                        continue;
+#endif
 		v4l2_ctrl_new_custom(&chan->ctrl_handler,
 			&vi5_custom_ctrls[i], NULL);
 		if (chan->ctrl_handler.error) {
@@ -428,8 +435,18 @@ static void vi5_capture_dequeue(struct tegra_channel *chan,
 					"err_data %d\n",
 					descr->status.frame_id, descr->status.flags,
 					descr->status.err_data);
+#ifdef	CONFIG_VIDEO_ECAM
+				/* Fix for continuous vi: corr_err: discarding frame error NVBUG ID: 2595468 */
+				if (descr->status.status == CAPTURE_STATUS_CSIMUX_FRAME) {
+					goto uncorr_err;
+				} else {
+					buf->vb2_state = VB2_BUF_STATE_REQUEUEING;
+					goto done;
+				}
+#else
 				buf->vb2_state = VB2_BUF_STATE_REQUEUEING;
 				goto done;
+#endif
 			}
 		} else if (!vi_port) {
 			gang_prev_frame_id = descr->status.frame_id;
@@ -841,11 +858,14 @@ static int vi5_channel_stop_streaming(struct vb2_queue *vq)
 	struct tegra_channel *chan = vb2_get_drv_priv(vq);
 	long err;
 	int vi_port = 0;
+
 	if (!chan->bypass)
 		vi5_channel_stop_kthreads(chan);
 
+#ifndef CONFIG_VIDEO_ECAM
 	/* csi stream/sensor(s) devices to be closed before vi channel */
 	tegra_channel_set_stream(chan, false);
+#endif
 
 	if (!chan->bypass) {
 		for (vi_port = 0; vi_port < chan->valid_ports; vi_port++) {
@@ -862,6 +882,11 @@ static int vi5_channel_stop_streaming(struct vb2_queue *vq)
 		/* release all remaining buffers to v4l2 */
 		tegra_channel_queued_buf_done(chan, VB2_BUF_STATE_ERROR, false);
 	}
+
+#ifdef CONFIG_VIDEO_ECAM
+	/* csi stream/sensor(s) devices to be closed before vi channel */
+	tegra_channel_set_stream(chan, false);
+#endif
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 9, 0)
 	media_entity_pipeline_stop(&chan->video->entity);

@@ -514,6 +514,13 @@ config VIDEO_THS8200
 
 comment "Camera sensor devices"
 
+config VIDEO_ECAM
+	tristate "e-con camera support"
+	depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
+	---help---
+	This is a flag to enable changes required to support the
+	Video4Linux2 sensor-level driver for the e-con Systems camera.
+
 config VIDEO_APTINA_PLL
 	tristate
 

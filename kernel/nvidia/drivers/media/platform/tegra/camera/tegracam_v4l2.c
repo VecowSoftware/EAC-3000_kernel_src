@@ -96,6 +96,30 @@ error:
 	module_put(s_data->owner);
 	return err;
 }
+/*
+static int tegracam_s_parm(struct v4l2_subdev *sd, struct v4l2_streamparm *param)
+{
+	struct i2c_client *client = v4l2_get_subdevdata(sd);
+	struct camera_common_data *s_data = to_camera_common_data(&client->dev);
+	int ret;
+
+	for (ret = 0; ret < s_data->frmfmt[s_data->mode].num_framerates; ret++) {
+		if ((s_data->frmfmt[s_data->mode].framerates[ret] ==
+					param->parm.capture.timeperframe.denominator)) {
+			param->parm.capture.capability |= V4L2_CAP_TIMEPERFRAME;
+			param->parm.capture.timeperframe.denominator =
+				s_data->frmfmt[s_data->mode].framerates[ret];
+			param->parm.capture.timeperframe.numerator = 1;
+			return 0;
+		}
+	}
+	param->parm.capture.capability |= V4L2_CAP_TIMEPERFRAME;
+	param->parm.capture.timeperframe.denominator =
+		s_data->frmfmt[s_data->mode].framerates[0];
+	param->parm.capture.timeperframe.numerator = 1;
+	return 0;
+}
+*/
 
 static int v4l2sd_g_input_status(struct v4l2_subdev *sd, u32 *status)
 {

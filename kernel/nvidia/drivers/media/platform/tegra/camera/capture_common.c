@@ -96,6 +96,8 @@ void destroy_buffer_table(struct capture_buffer_table *tab)
 	struct hlist_node *next;
 	struct capture_mapping *pin;
 
+	if (tab == NULL)
+		goto skip;
 	write_lock(&tab->hlock);
 
 	hash_for_each_safe(tab->hhead, bkt, next, pin, hnode) {
@@ -110,6 +112,7 @@ void destroy_buffer_table(struct capture_buffer_table *tab)
 	write_unlock(&tab->hlock);
 
 	kmem_cache_destroy(tab->cache);
+skip:
 	kfree(tab);
 }
 
