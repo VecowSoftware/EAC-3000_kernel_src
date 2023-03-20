@@ -276,18 +276,20 @@ static int pca954x_deselect_mux(struct i2c_mux_core *muxc, u32 chan)
 	struct pca954x *data = i2c_mux_priv(muxc);
 	struct i2c_client *client = data->client;
 	s32 idle_state;
-
+        //printk(KERN_INFO "pca954x_deselect_mux call 1.\n");
 	idle_state = READ_ONCE(data->idle_state);
-	if (idle_state >= 0)
+	if (idle_state >= 0){
+		 printk(KERN_INFO "pca954x_deselect_mux call 2.\n");
 		/* Set the mux back to a predetermined channel */
 		return pca954x_select_chan(muxc, idle_state);
-
-	if (idle_state == MUX_IDLE_DISCONNECT) {
+        }
+	//if (idle_state == MUX_IDLE_DISCONNECT) {
+		//printk(KERN_INFO "pca954x_deselect_mux call 3.\n");
 		/* Deselect active channel */
 		data->last_chan = 0;
 		return pca954x_reg_write(muxc->parent, client,
 					 data->last_chan);
-	}
+	//}
 
 	/* otherwise leave as-is */
 
@@ -551,8 +553,13 @@ pca954x_probe_skip_detect:
 
 	data->idle_state = MUX_IDLE_AS_IS;
 	if (device_property_read_u32(dev, "idle-state", &data->idle_state)) {
-		if (device_property_read_bool(dev, "i2c-mux-idle-disconnect"))
+	//if(TRUE) {
+		//printk(KERN_INFO "pca954x_set MUX_IDLE_DISCONNECT 1.\n");
+		if (device_property_read_bool(dev, "i2c-mux-idle-disconnect")){
+		        //printk(KERN_INFO "pca954x_set MUX_IDLE_DISCONNECT 2.\n");
+		       // WRITE_ONCE(data->idle_state,MUX_IDLE_DISCONNECT);
 			data->idle_state = MUX_IDLE_DISCONNECT;
+			}
 	}
 
 	/*
@@ -593,7 +600,7 @@ pca954x_probe_skip_detect:
 		if (client->dev.of_node)
 			idle_disconnect_pd = true;
 
-		data->idle_state |= (idle_disconnect_pd ||
+                data->idle_state |= (idle_disconnect_pd ||
 				   data->idle_state) << num;
 		ret = i2c_mux_add_adapter(muxc, force, num, class);
 		if (ret)
