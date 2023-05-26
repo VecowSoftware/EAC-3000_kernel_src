@@ -1,0 +1,1 @@
+cmd_/home/vecow/WORK_AREA1/EAC-3000/JP-5.1.1/2.kernel_src/kernel/kernel-5.10/modules.order := {  :; } | awk '!x[$$0]++' - > /home/vecow/WORK_AREA1/EAC-3000/JP-5.1.1/2.kernel_src/kernel/kernel-5.10/modules.order
