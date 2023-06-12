@@ -997,7 +997,7 @@ i2c@3180000 {
 
 / {
 
-	tcp: tegra-camera-platform {
+	tegra-camera-platform {
 		compatible = "nvidia, tegra-camera-platform";
 		/**
 		* Physical settings to calculate max ISO BW

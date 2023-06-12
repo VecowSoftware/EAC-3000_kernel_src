@@ -9,6 +9,7 @@ ifneq ($(filter y,$(CONFIG_ARCH_TEGRA_23x_SOC)),)
 BUILD_ENABLE=y
 endif
 
+dtb-$(BUILD_ENABLE) += tegra234-p3701-0000-p3737-0000-nilecam21_two_lane.dtb
 dtb-$(BUILD_ENABLE) += tegra234-p3701-0000-p3737-0000.dtb
 dtb-$(BUILD_ENABLE) += tegra234-p3701-0000-as-p3701-0004-p3737-0000.dtb
 dtb-$(BUILD_ENABLE) += tegra234-p3701-0000-as-p3767-0004-p3737-0000.dtb
