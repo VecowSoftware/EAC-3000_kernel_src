@@ -4588,6 +4588,7 @@ static int tegra_pcie_dw_resume_early(struct device *dev)
 	return 0;
 }
 
+#if 0
 static void tegra_pcie_dw_shutdown(struct platform_device *pdev)
 {
 	struct tegra_pcie_dw *pcie = platform_get_drvdata(pdev);
@@ -4612,6 +4613,7 @@ static void tegra_pcie_dw_shutdown(struct platform_device *pdev)
 		pex_ep_event_pex_rst_assert(pcie);
 	}
 }
+#endif
 
 static const struct tegra_pcie_of_data tegra_pcie_of_data_t194 = {
 	.version = TEGRA194_DWC_IP_VER,
@@ -4701,7 +4703,7 @@ static const struct dev_pm_ops tegra_pcie_dw_pm_ops = {
 static struct platform_driver tegra_pcie_dw_driver = {
 	.probe = tegra_pcie_dw_probe,
 	.remove = tegra_pcie_dw_remove,
-	.shutdown = tegra_pcie_dw_shutdown,
+	//.shutdown = tegra_pcie_dw_shutdown, // Mark for poweroff, if it is enabled that poweroff will failure.
 	.driver = {
 		.name	= "tegra194-pcie",
 		.pm = &tegra_pcie_dw_pm_ops,

@@ -2127,11 +2127,13 @@ static int lan78xx_phy_init(struct lan78xx_net *dev)
 	}
 
 	/* if phyirq is not set, use polling mode in phylib */
-	if (dev->domain_data.phyirq > 0)
-		phydev->irq = dev->domain_data.phyirq;
-	else
+	//if (dev->domain_data.phyirq > 0)
+	//	phydev->irq = dev->domain_data.phyirq;
+	//else
 		phydev->irq = PHY_POLL;
-	netdev_dbg(dev->net, "phydev->irq = %d\n", phydev->irq);
+    netdev_dbg(dev->net, "phydev->irq = %d\n", phydev->irq);
+    //pr_info("[EAC-3000] dev->domain_data.phyirq = %d\n", dev->domain_data.phyirq);
+    //pr_info("[EAC-3000] phydev->irq = %d\n", phydev->irq);
 
 	/* set to AUTOMDIX */
 	phydev->mdix = ETH_TP_MDI_AUTO;

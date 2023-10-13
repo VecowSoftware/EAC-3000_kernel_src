@@ -26,18 +26,19 @@
 			status = "okay";
 		};
 	};
-
+    
 	i2c@c250000 {
+        /*
 		rt5658: rt5659.7-001a@1a {
 			compatible = "realtek,rt5658";
 			reg = <0x1a>;
 
-			/* refer include/sound/rt5659.h for the values to be used */
-			realtek,jd-src = <2>; /* RT5659_JD_HDA_HEADER */
-			realtek,dmic1-data-pin = <0>; /* RT5659_DMIC1_NULL */
-			realtek,dmic2-data-pin = <0>; /* RT5659_DMIC2_NULL */
+			" refer include/sound/rt5659.h for the values to be used "
+			realtek,jd-src = <2>; " RT5659_JD_HDA_HEADER "
+			realtek,dmic1-data-pin = <0>; " RT5659_DMIC1_NULL "
+			realtek,dmic2-data-pin = <0>; " RT5659_DMIC2_NULL "
 
-			/* Codec IRQ output */
+			" Codec IRQ output "
 			interrupt-parent = <&tegra_main_gpio>;
 			interrupts = <TEGRA194_MAIN_GPIO(S, 5) GPIO_ACTIVE_HIGH>;
 
@@ -58,17 +59,20 @@
 				};
 			};
 		};
+        */
 	};
 
 	/* Default for all I2S is long fsync width(31) */
-	aconnect@2a41000 {
+	/*
+    aconnect@2a41000 {
 		ahub {
-			/* I2S4 in Short frame sync for BT SCO */
+			" I2S4 in Short frame sync for BT SCO "
 			i2s@2901300 {
 				bclk-ratio = <4>;
 			};
 		};
 	};
+    */
 
 	tegra_acsl_audio: acsl_audio {
 		status = "okay";
@@ -90,7 +94,8 @@
 		clock-names = "pll_a", "pll_a_out0", "extern1";
 		assigned-clocks = <&bpmp_clks TEGRA194_CLK_AUD_MCLK>;
 		assigned-clock-parents = <&bpmp_clks TEGRA194_CLK_PLLA_OUT0>;
-
+        
+        /*
 		nvidia-audio-card,widgets =
 			"Headphone",	"CVB-RT Headphone Jack",
 			"Microphone",	"CVB-RT Mic Jack",
@@ -107,6 +112,7 @@
 			"CVB-RT DMIC L2",            "CVB-RT Int Mic",
 			"CVB-RT DMIC R1",            "CVB-RT Int Mic",
 			"CVB-RT DMIC R2",            "CVB-RT Int Mic";
+        */
 
 		nvidia-audio-card,mclk-fs = <256>;
 	};
@@ -283,6 +289,7 @@
  */
 
 /* Override with Codec entries */
+/*
 &i2s1_to_codec {
 	link-name = "rt565x-playback";
 	codec {
@@ -290,6 +297,7 @@
 		prefix = "CVB-RT";
 	};
 };
+*/
 
 hdr40_snd_link_i2s: &i2s2_to_codec { };
 
@@ -300,9 +308,11 @@ hdr40_snd_link_i2s: &i2s2_to_codec { };
 };
 
 /* Audio graph related bindings */
+/*
 &i2s1_dap_ep {
 	remote-endpoint = <&rt5658_ep>;
 };
+*/
 
 &i2s4_dap_ep {
 	dai-format = "dsp_a";

@@ -6374,7 +6374,7 @@ bool tegra_is_bl_display_initialized(int instance)
 		pr_debug("dc->fb_mem not initialized\n");
 		return false;
 	}
-	return (dc->fb_mem->start != 0);
+	return (dc->fb_mem->start != 0); // return false; // Deprecated, modified by William Ho
 }
 EXPORT_SYMBOL(tegra_is_bl_display_initialized);
 
