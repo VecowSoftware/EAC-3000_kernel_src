@@ -26,7 +26,7 @@
 
 / {
     model = "EAC-3000, Jetson AGX Xavier";
-    nsdk_version = "v1.1.0.0"; 
+    nsdk_version = "v1.2.0.0"; 
 
     ethernet@2490000 {
         status = "disabled";
